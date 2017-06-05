@@ -1,0 +1,15 @@
+{
+    "fnc": "function",
+    "obj": "object",
+    "str": "string",
+    "nbr": "number",
+    "bln": "boolean",
+    "arr": "array",
+
+    "function": "function",
+    "object": "object",
+    "string": "string",
+    "number": "number",
+    "boolean": "boolean",
+    "array": "array"
+}

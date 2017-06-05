@@ -1,47 +1,20 @@
-function canCopyAsValue(value) {
-    const type = typeof value;
+// type checker
+const CheckTypeInfo = require('./check-type/info');
+const checkType = require('./check-type/');
+const types = require('./check-type/types.json');
 
-    return ['function', 'string', 'number', 'boolean'].indexOf(type) !== -1 || value instanceof RegExp;
+function check(schema, obj) {
+    const checkTypeInfo = new CheckTypeInfo();
+
+    checkType(schema, obj, checkTypeInfo);
+
+    return checkTypeInfo.getState();
 }
 
-function maskArray(schema, donor) {
-    return schema.props && schema.props.props ?
-        donor.map(item => mask(schema.props, item, {})) :
-        donor.map(item => item);
-}
+module.exports.createChecker = schema => obj => check(schema, obj);
+module.exports.types = types;
 
-// schema, donor, receiver
-function mask(schema, donor, receiver) {
-    if (!schema.props) {
-        Object.keys(schema)
-            .forEach(schemaKey => Object.assign(receiver, {[schemaKey]: donor[schemaKey]}));
-        return receiver;
-    }
+// mask
+const mask = require('./mask');
 
-    Object.keys(schema.props).forEach(schemaKey => {
-        if (!donor.hasOwnProperty(schemaKey)) {
-            return;
-        }
-
-        const value = donor[schemaKey];
-
-        if (canCopyAsValue(value)) {
-            receiver[schemaKey] = value; // eslint-disable-line no-param-reassign
-            return;
-        }
-
-        if (Array.isArray(value)) {
-            receiver[schemaKey] = maskArray(schema.props[schemaKey], value); // eslint-disable-line no-param-reassign
-            return;
-        }
-
-        if (typeof value === 'object') {
-            receiver[schemaKey] = mask(schema.props[schemaKey], value, {});  // eslint-disable-line no-param-reassign
-            // return;
-        }
-    });
-
-    return receiver;
-}
-
-module.exports = schema => donor => mask(schema, donor, {});
+module.exports.createMask = schema => donor => mask(schema, donor, {});
