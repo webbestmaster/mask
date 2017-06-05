@@ -16,11 +16,12 @@ describe('Mask', () => {
             myString: 'my string',
             myNumber: 11,
             myBoolean: true,
+            iShouldBeRemove: true, // will remove, cause schema has no this property
             myFunction: emptyFunction,
             myArray: [
                 {
                     myProperty: 'my value 1',
-                    mySecondProperty: 'my second value 1'
+                    mySecondProperty: 'my second value 1' // will remove, cause schema has no this property
                 },
                 {
                     myProperty: 'my value 2',
