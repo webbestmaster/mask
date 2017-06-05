@@ -1,0 +1,29 @@
+{
+  "name": "mask",
+  "version": "0.0.1",
+  "description": "Mask for object",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
+    "test": "mocha ./test/**/*.js",
+    "test-cover": "./test-cover.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webbestmaster/mask.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webbestmaster/mask/issues"
+  },
+  "homepage": "https://github.com/webbestmaster/mask#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "chai": "^4.0.1",
+    "eslint": "^3.19.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.4.2"
+  }
+}
