@@ -8,10 +8,6 @@ describe('Type checker', () => {
     it('Check types', () => {
         const checker = createChecker(schema);
 
-        function emptyFunction() {
-            console.log('I need for test only');
-        }
-
         const rawObject = {
             myObject: {
                 property: 'value'
@@ -19,12 +15,13 @@ describe('Type checker', () => {
             myString: 'my string',
             myNumber: 11,
             myBoolean: true,
-            iShouldBeRemove: true, // will remove, cause schema has no this property
-            myFunction: emptyFunction,
+            iShouldBeRemove: true, // will not check, cause schema has no this property
+            myFunction: () => {
+            },
             myArray: [
                 {
                     myProperty: 1,
-                    mySecondProperty: 'my second value 1' // will remove, cause schema has no this property
+                    mySecondProperty: 'my second value 1' // will not check, cause schema has no this property
                 },
                 {
                     myProperty: 1,
@@ -38,10 +35,7 @@ describe('Type checker', () => {
             mySecondArray: [1, 2, 3]
         };
 
-        const checkResult = checker(rawObject);
-
-        assert(checkResult.isValid === true);
-        assert(checkResult.isInvalid === false);
+        assert(checker(rawObject).isValid);
     });
 
     it('Check required - passed', () => {
@@ -54,17 +48,10 @@ describe('Type checker', () => {
             }
         });
 
-        const rawObject = {
-            myString: 'my string'
-        };
-
-        const checkResult = checker(rawObject);
-
-        assert(checkResult.isValid === true);
-        assert(checkResult.isInvalid === false);
+        assert(checker({myString: 'my string'}).isValid);
     });
 
-    it('Check required - fail', () => {
+    it('Check required', () => {
         const checker = createChecker({
             props: {
                 myString: {
@@ -78,10 +65,67 @@ describe('Type checker', () => {
             notMyString: 'not my string'
         };
 
-        const checkResult = checker(rawObject);
+        assert(checker(rawObject).isInvalid);
+        assert(checker(rawObject).path === '/myString');
+    });
 
-        assert(checkResult.isValid === false);
-        assert(checkResult.isInvalid === true);
-        assert(checkResult.path === '/myString');
+    it('Check by function', () => {
+        const checker = createChecker({
+            props: {
+                myValue: {
+                    type: value => value < 10,
+                    isRequired: true
+                }
+            }
+        });
+
+        assert(checker({myValue: 5}).isValid);
+        assert(checker({myValue: 20}).isInvalid);
+    });
+
+    it('Check array', () => {
+        const checker = createChecker({
+            props: {
+                array: {
+                    type: types.array,
+                    isRequired: true,
+                    props: {
+                        type: types.number,
+                        isRequired: true
+                    }
+                }
+            }
+        });
+
+        assert(checker({array: 'i am not array'}).isInvalid);
+        assert(checker({array: [1, 'string', 3]}).isInvalid);
+        assert(checker({array: [1, 2, 3]}).isValid);
+    });
+
+    it('Check by Re', () => {
+        const checker = createChecker({
+            props: {
+                string: {
+                    type: /js/i,
+                    isRequired: true
+                }
+            }
+        });
+
+        assert(checker({string: 'js'}).isValid);
+        assert(checker({string: 'love'}).isInvalid);
+    });
+
+    it('Not existing type', () => {
+        const checker = createChecker({
+            props: {
+                string: {
+                    type: 'wrongType',
+                    isRequired: true
+                }
+            }
+        });
+
+        assert.throws(() => checker({string: 'js'}));
     });
 });

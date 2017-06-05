@@ -9,7 +9,6 @@ describe('Mask', () => {
         const mask = createMask(schema);
 
         function emptyFunction() {
-            console.log('I need for test only');
         }
 
         const rawObject = {

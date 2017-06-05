@@ -14,14 +14,7 @@ class Info {
     }
 
     setErrorMessage(text) {
-        const info = this;
-
-        if (info._errorMessage) {
-            return false;
-        }
-
-        info._errorMessage = text;
-        return true;
+        this._errorMessage = text;
     }
 
     setCurrentKey(key) {
@@ -41,18 +34,10 @@ class Info {
     }
 
     setCurrentState(type, value) {
-        const info = this;
-
-        if (info._errorMessage) {
-            return false;
-        }
-
-        if (typeof type === 'function') {
-            type = type.toString(); // eslint-disable-line no-param-reassign
-        }
-
-        Object.assign(info._errorState, {type, value});
-        return true;
+        Object.assign(this._errorState, {
+            type: typeof type === 'function' ? type.toString() : type,
+            value
+        });
     }
 
     getState() {
