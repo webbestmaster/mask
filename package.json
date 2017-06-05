@@ -1,5 +1,5 @@
 {
-  "name": "mask",
+  "name": "clean-mask",
   "version": "0.0.1",
   "description": "Mask for object",
   "main": "index.js",
