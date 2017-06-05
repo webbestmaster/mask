@@ -13,6 +13,9 @@ describe('Type checker', () => {
         }
 
         const rawObject = {
+            myObject: {
+                property: 'value'
+            },
             myString: 'my string',
             myNumber: 11,
             myBoolean: true,

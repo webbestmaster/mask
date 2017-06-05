@@ -4,8 +4,8 @@
 # npm
 node_modules
 
-# dist
-/dist/
+# Test
+/reports-cover/
 
 # example
 # /* eslint-disable no-unused-vars */

@@ -12,12 +12,6 @@ function maskArray(schema, donor) {
 
 // schema, donor, receiver
 function mask(schema, donor, receiver) {
-    if (!schema.props) {
-        Object.keys(schema)
-            .forEach(schemaKey => Object.assign(receiver, {[schemaKey]: donor[schemaKey]}));
-        return receiver;
-    }
-
     Object.keys(schema.props).forEach(schemaKey => {
         if (!donor.hasOwnProperty(schemaKey)) {
             return;
@@ -26,19 +20,17 @@ function mask(schema, donor, receiver) {
         const value = donor[schemaKey];
 
         if (canCopyAsValue(value)) {
-            receiver[schemaKey] = value; // eslint-disable-line no-param-reassign
+            Object.assign(receiver, {[schemaKey]: value});
             return;
         }
 
         if (Array.isArray(value)) {
-            receiver[schemaKey] = maskArray(schema.props[schemaKey], value); // eslint-disable-line no-param-reassign
+            Object.assign(receiver, {[schemaKey]: maskArray(schema.props[schemaKey], value)});
             return;
         }
 
-        if (typeof value === 'object') {
-            receiver[schemaKey] = mask(schema.props[schemaKey], value, {});  // eslint-disable-line no-param-reassign
-            // return;
-        }
+        // here is should be an object, cause canCopyAsValue return false and Array.isArray return false too
+        Object.assign(receiver, {[schemaKey]: mask(schema.props[schemaKey], value, {})});
     });
 
     return receiver;

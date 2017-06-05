@@ -2,6 +2,7 @@
 /.idea/
 
 # Test
+/reports-cover/
 
 # Logs
 logs

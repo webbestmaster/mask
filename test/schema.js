@@ -4,6 +4,16 @@ module.exports = {
     // types.object - is default
     // isRequired: false - is default
     props: {
+        myObject: {
+            type: types.object,
+            isRequired: true,
+            props: {
+                property: {
+                    type: types.string,
+                    isRequired: true
+                }
+            }
+        },
         myString: {
             type: types.string,
             isRequired: true

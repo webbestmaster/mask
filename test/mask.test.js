@@ -13,6 +13,9 @@ describe('Mask', () => {
         }
 
         const rawObject = {
+            myObject: {
+                property: 'value'
+            },
             myString: 'my string',
             myNumber: 11,
             myBoolean: true,
@@ -36,6 +39,9 @@ describe('Mask', () => {
         };
 
         const dryObject = {
+            myObject: {
+                property: 'value'
+            },
             myString: 'my string',
             myNumber: 11,
             myBoolean: true,
